@@ -372,6 +372,9 @@ function renderImg(src) {
 async function loadImg() {
   const town = searchField.value;
   const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
+  // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
+  // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
+  // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
   const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
 
   const res = await fetch(url);
@@ -402,8 +405,70 @@ canvasArea.addEventListener('click', (e) => {
   }
 });
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBeoD9IqsVhQVRdeEaT1n467YdhkYzCDn4",
+  authDomain: "image-api-lskeeper.firebaseapp.com",
+  databaseURL: "https://image-api-lskeeper.firebaseio.com",
+  projectId: "image-api-lskeeper",
+  storageBucket: "image-api-lskeeper.appspot.com",
+  messagingSenderId: "784369560587",
+  appId: "1:784369560587:web:00f38e79b696c9ccafab0e",
+  measurementId: "G-DNFXHF0P56"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const provider = new firebase.auth.GithubAuthProvider();
+provider.setCustomParameters({
+  'allow_signup': 'true'
+});
+
+getGitHubAuthResponse();
+
+function GitHubAuthPopUp() {
+  firebase.auth().signInWithPopup(provider).then((result) => {
+    let userName = result.additionalUserInfo.username;
+    console.log(userName)
+    authBtn.previousElementSibling.innerText = userName;
+    authBtn.remove();
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    const credential = error.credential;
+    // ...
+  });
+}
+
+function GitHubAuthRedirect() {
+  firebase.auth().signInWithRedirect(provider);
+}
+
+function getGitHubAuthResponse() {
+  firebase.auth().getRedirectResult().then((result) => {
+    if (result.credential) {
+      const userName = result.additionalUserInfo.username;
+      authBtn.previousElementSibling.innerText = userName;
+      authBtn.remove();
+    }
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    const credential = error.credential;
+  });
+}
 
 
-// 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
-// 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
-// e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
+
+const authBtn = document.getElementById('btn-auth');
+authBtn.addEventListener('click', e => {
+  GitHubAuthRedirect();
+});
+

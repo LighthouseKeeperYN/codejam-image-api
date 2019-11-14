@@ -65,6 +65,8 @@ button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.24), 0px 0px 4px rgba(0, 0, 0, 0.12); }
   .app-bar__nav-button {
     margin-right: 2.4rem; }
+  .app-bar__login {
+    margin-left: auto; }
   .app-bar__menu-button {
     margin-left: auto; }
 

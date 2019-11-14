@@ -16,6 +16,10 @@
     <div class="app-bar">
       <button class="nav-icon app-bar__nav-button"></button>
       <h1 class="app-bar__title">CodeJam - Palette</h1>
+      <div class="app-bar__login">
+        <p id="user-name"></p>
+        <button id="btn-auth">Login with GitHub account</button>
+      </div>
       <button class="menu-icon app-bar__menu-button"></button>
     </div>
 
@@ -49,7 +53,7 @@
 
         <li class="tool-item">
           <label class="tool-item__icon tool-item__color-circle">
-            <input class="color-input" id="color-prev" type="color"  disabled>
+            <input class="color-input" id="color-prev" type="color" disabled>
           </label>
           <p class="tool-item__text">Previous color</p>
         </li>
@@ -84,9 +88,11 @@
       <button class="btn-square" id="btn-512">512</button>
     </div>
 
+
   </div>
 
-
+  <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-auth.js"></script>
   <script src="app.js"></script>
 </body>
 

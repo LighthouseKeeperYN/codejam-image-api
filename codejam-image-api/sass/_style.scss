@@ -39,6 +39,10 @@
     margin-right: 2.4rem;
   }
 
+  &__login {
+    margin-left: auto;
+  }
+
   &__menu-button {
     margin-left: auto;
   }
@@ -63,7 +67,7 @@
   position: absolute;
   right: calc(50% - 256px);
   top: 14%;
-  
+
   width: 512px;
 
   display: grid;
