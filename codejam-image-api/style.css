@@ -85,7 +85,8 @@ button {
   width: 512px;
   display: grid;
   grid-template-columns: 8.5rem auto 8.5rem;
-  grid-template-rows: 3.3rem 512px 7rem; }
+  grid-template-rows: 3.3rem 512px 7rem;
+  gap: 1rem; }
 
 .canvas {
   width: 512px;

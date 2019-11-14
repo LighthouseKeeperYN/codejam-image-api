@@ -10,6 +10,8 @@ if (localStorage.getItem('imgData')) {
   };
 }
 
+const canvasArea = document.querySelector('.canvas-area');
+
 const pixelSize = 32;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
@@ -304,6 +306,49 @@ canvas.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
   if (selectedTool === 'pencil') {
     isDrawing = false;
+  }
+});
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+function renderImg(src) {
+  img = new Image();
+  img.src = src;
+
+  img.onload = function () {
+    ctx.imageSmoothingEnabled = false;
+
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.min(hRatio, vRatio);
+    const centerShift_x = (canvas.width - img.width * ratio) / 2;
+    const centerShift_y = (canvas.height - img.height * ratio) / 2;
+
+    ctx.fillRect(0, 0, canvas.width, canvas.clientWidth);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.drawImage(img, 0, 0, img.width, img.height,
+      centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+  }
+}
+
+function loadImg() {
+  let town = 'Minsk';
+  const accessKey = '8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff';
+  const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data.urls.small)
+      console.log(data)
+      renderImg(data.urls.small);
+    });
+}
+
+canvasArea.addEventListener('click', (e) => {
+  if (e.target.id === 'btn-load') {
+    loadImg();
   }
 });
 
