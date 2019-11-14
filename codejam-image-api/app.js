@@ -386,13 +386,28 @@ async function loadImg() {
 const rangeSlider = document.querySelector('.range-slider');
 const rangeSliderPointer = rangeSlider.previousElementSibling;
 
-rangeSlider.addEventListener('input', moveSliderPointer);
-window.addEventListener('load', moveSliderPointer);
+rangeSlider.addEventListener('input', initSlider);
+window.addEventListener('load', initSlider);
 
-function moveSliderPointer() {
-  rangeSliderPointer.innerHTML = rangeSlider.value;
+function initSlider() {
   const stepDistance = (rangeSlider.offsetWidth - 50) / rangeSlider.max;
   rangeSliderPointer.style.left = `${stepDistance * rangeSlider.value}px`;
+
+  if (rangeSlider.value == 0) {
+    rangeSliderPointer.innerHTML = 128;
+    pixelSize = 4;
+    renderImg(currentImg);
+  }
+  if (rangeSlider.value == 1) {
+    rangeSliderPointer.innerHTML = 256;
+    pixelSize = 2;
+    renderImg(currentImg);
+  }
+  if (rangeSlider.value == 2) {
+    rangeSliderPointer.innerHTML = 512;
+    pixelSize = 1;
+    renderImg(currentImg);
+  }
 }
 
 canvasArea.addEventListener('mousedown', e => {
@@ -412,21 +427,6 @@ canvasArea.addEventListener('click', (e) => {
   }
   if (e.target.id === 'btn-bw') {
     toGreyScale();
-  }
-
-  if (e.target.id === 'range-input') {
-    if (e.target.id === 'btn-128') {
-      pixelSize = 4;
-      renderImg(currentImg);
-    }
-    if (e.target.id === 'btn-256') {
-      pixelSize = 2;
-      renderImg(currentImg);
-    }
-    if (e.target.id === 'btn-512') {
-      pixelSize = 1;
-      renderImg(currentImg);
-    }
   }
 });
 
