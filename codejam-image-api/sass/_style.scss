@@ -188,7 +188,7 @@
 $slider-width: 514px;
 $slider-height: 3px;
 
-.range-input-wrapper {
+.range-slider-wrapper {
   position: relative;
 
   grid-column: 1 / span 3;
@@ -230,7 +230,7 @@ $slider-height: 3px;
   }
 }
 
-.range-input {
+.range-slider {
   position: absolute;
   top: 0;
 

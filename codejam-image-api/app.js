@@ -383,6 +383,18 @@ async function loadImg() {
   renderImg(data.urls.small);
 }
 
+const rangeSlider = document.querySelector('.range-slider');
+const rangeSliderPointer = rangeSlider.previousElementSibling;
+
+rangeSlider.addEventListener('input', moveSliderPointer);
+window.addEventListener('load', moveSliderPointer);
+
+function moveSliderPointer() {
+  rangeSliderPointer.innerHTML = rangeSlider.value;
+  const stepDistance = (rangeSlider.offsetWidth - 50) / rangeSlider.max;
+  rangeSliderPointer.style.left = `${stepDistance * rangeSlider.value}px`;
+}
+
 canvasArea.addEventListener('mousedown', e => {
   if (e.target.classList.contains('btn-square')) {
     e.target.style.transform = 'translate(1px, 2px)';
@@ -398,20 +410,23 @@ canvasArea.addEventListener('click', (e) => {
     loadImg();
     renderImg(canvas.toDataURL());
   }
-  if (e.target.id === 'btn-128') {
-    pixelSize = 4;
-    renderImg(currentImg);
-  }
-  if (e.target.id === 'btn-256') {
-    pixelSize = 2;
-    renderImg(currentImg);
-  }
-  if (e.target.id === 'btn-512') {
-    pixelSize = 1;
-    renderImg(currentImg);
-  }
   if (e.target.id === 'btn-bw') {
     toGreyScale();
+  }
+
+  if (e.target.id === 'range-input') {
+    if (e.target.id === 'btn-128') {
+      pixelSize = 4;
+      renderImg(currentImg);
+    }
+    if (e.target.id === 'btn-256') {
+      pixelSize = 2;
+      renderImg(currentImg);
+    }
+    if (e.target.id === 'btn-512') {
+      pixelSize = 1;
+      renderImg(currentImg);
+    }
   }
 });
 
@@ -483,14 +498,3 @@ authBtn.addEventListener('click', (e) => {
   GitHubAuthRedirect();
 });
 
-const slider = document.querySelector('.range-input');
-const sliderPointer = slider.previousElementSibling;
-
-slider.addEventListener('input', moveSliderPointer);
-window.addEventListener('load', moveSliderPointer);
-
-function moveSliderPointer() {
-  sliderPointer.innerHTML = slider.value;
-  const stepDistance = (slider.offsetWidth - 50) / slider.max;
-  sliderPointer.style.left = `${stepDistance * slider.value}px`;
-}

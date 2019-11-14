@@ -165,13 +165,13 @@ button {
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);
   border-radius: 2px; }
 
-.range-input-wrapper {
+.range-slider-wrapper {
   position: relative;
   grid-column: 1 / span 3;
   align-self: end;
   width: 514px;
   height: 3px; }
-  .range-input-wrapper__steps {
+  .range-slider-wrapper__steps {
     position: absolute;
     top: 0;
     z-index: 1;
@@ -179,12 +179,12 @@ button {
     padding: 0 23px;
     display: flex;
     justify-content: space-between; }
-  .range-input-wrapper__step {
+  .range-slider-wrapper__step {
     width: 3px;
     height: 3px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.541); }
-  .range-input-wrapper__step-value {
+  .range-slider-wrapper__step-value {
     position: absolute;
     width: 50px;
     transform: translate(0, -50px);
@@ -193,7 +193,7 @@ button {
     z-index: 2;
     pointer-events: none; }
 
-.range-input {
+.range-slider {
   position: absolute;
   top: 0;
   width: 100%;
@@ -202,7 +202,7 @@ button {
   -webkit-appearance: none;
   outline: none;
   background: #00BCD4; }
-  .range-input::-webkit-slider-thumb {
+  .range-slider::-webkit-slider-thumb {
     transform: translate(0, -45px) rotate(-45deg);
     width: 50px;
     height: 50px;
@@ -212,7 +212,7 @@ button {
     border: none;
     background: #00BCD4;
     -webkit-appearance: none; }
-  .range-input::-moz-range-thumb {
+  .range-slider::-moz-range-thumb {
     transform: translate(0, -45px) rotate(-45deg);
     width: 50px;
     height: 50px;
@@ -222,5 +222,5 @@ button {
     border: none;
     background: #00BCD4;
     -webkit-appearance: none; }
-  .range-input:hover {
+  .range-slider:hover {
     cursor: pointer; }
