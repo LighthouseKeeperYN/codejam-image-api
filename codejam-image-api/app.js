@@ -1,7 +1,5 @@
 const canvas = document.querySelector('.canvas');
 const ctx = canvas.getContext('2d');
-ctx.fillStyle = '#e5e5e5';
-ctx.fillRect(0, 0, canvas.width, canvas.clientWidth);
 if (localStorage.getItem('imgData')) {
   const img = new Image();
   img.src = localStorage.getItem('imgData');
@@ -11,8 +9,9 @@ if (localStorage.getItem('imgData')) {
 }
 
 const canvasArea = document.querySelector('.canvas-area');
+const searchField = document.getElementById('search-field');
 
-const pixelSize = 32;
+const pixelSize = 8;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
 
@@ -46,6 +45,14 @@ const colorButton = {
   a: document.getElementById('color-a'),
   b: document.getElementById('color-b'),
 };
+
+clearCanvas();
+
+function clearCanvas() {
+  ctx.fillStyle = '#e5e5e5';
+  ctx.fillRect(0, 0, canvas.width, canvas.clientWidth);
+  ctx.fillStyle = color.curr;
+}
 
 function hexToRGB(hex) {
   const m = hex.match(/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i);
@@ -314,27 +321,37 @@ document.addEventListener('mouseup', () => {
 function renderImg(src) {
   img = new Image();
   img.src = src;
+  img.crossOrigin = "anonymous";
 
   img.onload = function () {
     ctx.imageSmoothingEnabled = false;
+
+    clearCanvas();
+
+    ctx.scale(1 / pixelSize, 1 / pixelSize);
 
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.min(hRatio, vRatio);
     const centerShift_x = (canvas.width - img.width * ratio) / 2;
     const centerShift_y = (canvas.height - img.height * ratio) / 2;
-
-    ctx.fillRect(0, 0, canvas.width, canvas.clientWidth);
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  
     ctx.drawImage(img, 0, 0, img.width, img.height,
       centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+  
+    ctx.globalCompositeOperation = 'copy';
+
+    ctx.setTransform(pixelSize, 0, 0, pixelSize, 0, 0);
+    ctx.drawImage(canvas, 0, 0);
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
   }
 }
 
 function loadImg() {
-  let town = 'Minsk';
-  const accessKey = '8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff';
+  let town = searchField.value;
+  const accessKey = '4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83';
   const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
 
   fetch(url)
@@ -351,5 +368,3 @@ canvasArea.addEventListener('click', (e) => {
     loadImg();
   }
 });
-
-
