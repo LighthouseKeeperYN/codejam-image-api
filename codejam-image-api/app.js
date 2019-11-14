@@ -16,6 +16,7 @@ let currentImg = canvas.toDataURL();
 let pixelSize = 2;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
+let blackWhite = false;
 
 const cursor = {
   curr: {
@@ -324,6 +325,21 @@ document.addEventListener('mouseup', () => {
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+function toGreyScale() {
+  let imageData = ctx.getImageData(0, 0, 512, 512);
+  let data = imageData.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+    let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    data[i] = avg;
+    data[i + 1] = avg;
+    data[i + 2] = avg;
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  currentImg = canvas.toDataURL();
+}
+
 function renderImg(src) {
   img = new Image();
   img.src = src;
@@ -381,7 +397,12 @@ canvasArea.addEventListener('click', (e) => {
     pixelSize = 1;
     renderImg(currentImg);
   }
+  if (e.target.id === 'btn-bw') {
+    toGreyScale();
+  }
 });
+
+
 
 // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
 // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
