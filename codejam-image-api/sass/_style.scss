@@ -59,15 +59,24 @@
 }
 
 // CANVAS
-.canvas {
+.canvas-area {
   position: absolute;
   right: calc(50% - 256px);
   top: 14%;
+  
+  width: 512px;
 
+  display: grid;
+  grid-template-columns: 8.5rem auto 8.5rem;
+  grid-template-rows: 3.3rem 512px 7rem;
+}
+
+.canvas {
   width: 512px;
   height: 512px;
 
   background-color: $color-bg;
+  grid-column: 1 / span 3;
 
   image-rendering: pixelated;
 }
