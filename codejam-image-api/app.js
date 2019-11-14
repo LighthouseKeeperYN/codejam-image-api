@@ -371,7 +371,7 @@ function renderImg(src) {
 
 async function loadImg() {
   const town = searchField.value;
-  const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
+  const accessKey = '8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff';
   // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
   // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
   // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
@@ -383,7 +383,17 @@ async function loadImg() {
   renderImg(data.urls.small);
 }
 
+canvasArea.addEventListener('mousedown', e => {
+  if (e.target.classList.contains('btn-square')) {
+    e.target.style.transform = 'translate(1px, 2px)';
+  }
+});
+
 canvasArea.addEventListener('click', (e) => {
+  if (e.target.classList.contains('btn-square')) {
+    e.target.style.transform = 'translate(0, 0)';
+  }
+
   if (e.target.id === 'btn-load') {
     loadImg();
     renderImg(canvas.toDataURL());
@@ -465,10 +475,22 @@ function getGitHubAuthResponse() {
   });
 }
 
-
-
 const authBtn = document.getElementById('btn-auth');
-authBtn.addEventListener('click', e => {
+authBtn.addEventListener('mousedown', (e) => {
+  e.target.style.transform = 'translate(1px, 2px)';
+});
+authBtn.addEventListener('click', (e) => {
   GitHubAuthRedirect();
 });
 
+const slider = document.querySelector('.range-input');
+const sliderPointer = slider.previousElementSibling;
+
+slider.addEventListener('input', moveSliderPointer);
+window.addEventListener('load', moveSliderPointer);
+
+function moveSliderPointer() {
+  sliderPointer.innerHTML = slider.value;
+  const stepDistance = (slider.offsetWidth - 50) / slider.max;
+  sliderPointer.style.left = `${stepDistance * slider.value}px`;
+}

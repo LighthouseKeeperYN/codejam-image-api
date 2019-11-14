@@ -17,8 +17,8 @@
       <button class="nav-icon app-bar__nav-button"></button>
       <h1 class="app-bar__title">CodeJam - Palette</h1>
       <div class="app-bar__login">
-        <p id="user-name"></p>
-        <button id="btn-auth">Login with GitHub account</button>
+        <p></p>
+        <button class="btn-square" id="btn-auth">Login with GitHub account</button>
       </div>
       <button class="menu-icon app-bar__menu-button"></button>
     </div>
@@ -78,15 +78,33 @@
 
     <div class="canvas-area">
       <button class="btn-square" id="btn-load">Load</button>
-      <input class="search-field" id="search-field" type="text" name="search-field">
+      <label class="search-field-wrapper">
+        <input class="search-field" id="search-field" type="text" name="search-field">
+      </label>
       <button class="btn-square" id="btn-bw">B&W</button>
 
       <canvas class="canvas" width="512" height="512"></canvas>
 
-      <button class="btn-square" id="btn-128">128</button>
+      <!-- <button class="btn-square" id="btn-128">128</button>
       <button class="btn-square" id="btn-256">256</button>
-      <button class="btn-square" id="btn-512">512</button>
+      <button class="btn-square" id="btn-512">512</button> -->
+
+      <div class="range-input-wrapper">
+        <div class="range-input-wrapper__steps">
+          <span class="range-input-wrapper__step"></span>
+          <span class="range-input-wrapper__step"></span>
+          <span class="range-input-wrapper__step"></span>
+        </div>
+        <span class="range-input-wrapper__step-value">123</span>
+        <input class="range-input" type="range" min="0" max="2">
+      </div>
     </div>
+
+
+
+
+
+
 
 
   </div>
