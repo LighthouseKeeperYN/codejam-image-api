@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>codejam-palette</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="work-area">
+    <div class="app-bar">
+      <button class="nav-icon app-bar__nav-button"></button>
+      <h1 class="app-bar__title">CodeJam - Palette</h1>
+      <button class="menu-icon app-bar__menu-button"></button>
+    </div>
+
+    <div class="work-area__tools tool-panel">
+      <ul class="tool-list">
+        <li class="tool-item" id="pencil">
+          <img class="tool-item__icon" src="assets/img/pencil.svg" alt="icon">
+          <p class="tool-item__text">Pencil</p>
+        </li>
+
+        <li class="tool-item" id="bucket">
+          <img class="tool-item__icon" src="assets/img/paint-bucket.svg" alt="icon">
+          <p class="tool-item__text">Paint bucket</p>
+        </li>
+
+        <li class="tool-item" id="color-picker">
+          <img class="tool-item__icon" src="assets/img/color-picker.svg" alt="icon">
+          <p class="tool-item__text">Choose color</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="work-area__colors tool-panel">
+      <ul class="tool-list">
+        <li class="tool-item tool-item--selected">
+          <label class="tool-item__icon tool-item__color-circle">
+            <input class="color-input" id="color-curr" type="color">
+          </label>
+          <p class="tool-item__text">Current color</p>
+        </li>
+
+        <li class="tool-item">
+          <label class="tool-item__icon tool-item__color-circle">
+            <input class="color-input" id="color-prev" type="color"  disabled>
+          </label>
+          <p class="tool-item__text">Previous color</p>
+        </li>
+      </ul>
+
+      <ul class="tool-list">
+        <li class="tool-item">
+          <label class="tool-item__icon tool-item__color-circle">
+            <input class="color-input" id="color-a" type="color">
+          </label>
+          <p class="tool-item__text">Color 1</p>
+        </li>
+
+        <li class="tool-item">
+          <label class="tool-item__icon tool-item__color-circle">
+            <input class="color-input" id="color-b" type="color">
+          </label>
+          <p class="tool-item__text">Color 2</p>
+        </li>
+      </ul>
+    </div>
+
+    <canvas class="canvas" width="512" height="512"></canvas>
+
+  </div>
+
+
+  <script src="bundle.js" type="module"></script>
+</body>
+
+</html>

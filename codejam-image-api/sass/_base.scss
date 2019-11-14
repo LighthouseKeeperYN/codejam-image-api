@@ -1,0 +1,119 @@
+// ABSTRACTS
+
+$font-main: 'Roboto', Tahoma, sans-serif;
+
+$font-size-title: 2rem;
+$font-size-normal: 1.6rem;
+
+$color-black-o: rgba(0, 0, 0, 0.87);
+$color-black-o-light: rgba(0, 0, 0, 0.541327);
+$color-bg: #e5e5e5;
+$color-white: #fff;
+
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin positionCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin marginCollapseFix {
+  padding-top: 1px;
+  margin-top: -1px;
+}
+
+@mixin flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// MEDIA QUERY arguments
+// 0-600:      phone
+// 600-900:    tab-port
+// 900-1200:   tab-land
+// 1800+:      widescreen
+
+// 1em - 16.6px;
+
+@mixin respond ($breakpoint) {
+  @if $breakpoint == phone {
+    @media (max-width: 37.5em) { @content };
+  }
+  @if $breakpoint == tab-port {
+    @media (max-width: 56.25em) { @content };
+  }
+  @if $breakpoint == tab-land {
+    @media (max-width: 75em) { @content };
+  }
+  @if $breakpoint == widescreen {
+    @media (min-width: 112.5em) { @content };
+  }
+}
+
+// BASE AND RESETS
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  // This defines 1em
+  // 62.5% of 16px = 10px = 1em
+  font-size: 62.5%;
+
+  @include respond(widescreen) {
+    font-size: 75%; // 1rem = 12px, 12/16 = 75%
+  }
+
+  @include respond(tab-land) {
+    font-size: 56.25%; // 1rem = 9px, 9/16 = 56.25%
+  }
+
+  @include respond(tab-port) {
+    font-size: 50%; // 1rem = 8px, 8/16 = 50%
+  }
+}
+
+body {
+  box-sizing: border-box;
+
+  background-color: $color-bg;
+
+  font-family: $font-main;
+  color: $color-black-o-light;
+  font-size: $font-size-normal;
+}
+
+h1 {
+  margin: 0;
+  
+  font-size: $font-size-title;
+  color: $color-black-o;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
