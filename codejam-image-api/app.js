@@ -349,18 +349,14 @@ function renderImg(src) {
   }
 }
 
-function loadImg() {
-  let town = searchField.value;
+async function loadImg() {
+  const town = searchField.value;
   const accessKey = '4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83';
   const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
 
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data.urls.small)
-      console.log(data)
-      renderImg(data.urls.small);
-    });
+  const res = await fetch(url);
+  const data = await res.json();
+  renderImg(data.urls.small);
 }
 
 canvasArea.addEventListener('click', (e) => {
