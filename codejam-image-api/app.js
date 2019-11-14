@@ -1,5 +1,6 @@
 const canvas = document.querySelector('.canvas');
 const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
 if (localStorage.getItem('imgData')) {
   const img = new Image();
   img.src = localStorage.getItem('imgData');
@@ -11,7 +12,8 @@ if (localStorage.getItem('imgData')) {
 const canvasArea = document.querySelector('.canvas-area');
 const searchField = document.getElementById('search-field');
 
-const pixelSize = 8;
+let currentImg = canvas.toDataURL();
+let pixelSize = 2;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
 
@@ -292,6 +294,8 @@ canvas.addEventListener('mousedown', (e) => {
     ctx.fillStyle = colorToString(color.curr);
 
     fill(e.layerX, e.layerY);
+
+    currentImg = canvas.toDataURL();
   }
   if (selectedTool === 'color-picker') {
     colorPicker(e.layerX, e.layerY);
@@ -311,8 +315,10 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 document.addEventListener('mouseup', () => {
-  if (selectedTool === 'pencil') {
+  if (selectedTool === 'pencil' && isDrawing) {
     isDrawing = false;
+
+    currentImg = canvas.toDataURL();
   }
 });
 
@@ -324,8 +330,6 @@ function renderImg(src) {
   img.crossOrigin = "anonymous";
 
   img.onload = function () {
-    ctx.imageSmoothingEnabled = false;
-
     clearCanvas();
 
     ctx.scale(1 / pixelSize, 1 / pixelSize);
@@ -335,10 +339,10 @@ function renderImg(src) {
     const ratio = Math.min(hRatio, vRatio);
     const centerShift_x = (canvas.width - img.width * ratio) / 2;
     const centerShift_y = (canvas.height - img.height * ratio) / 2;
-  
+
     ctx.drawImage(img, 0, 0, img.width, img.height,
       centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
-  
+
     ctx.globalCompositeOperation = 'copy';
 
     ctx.setTransform(pixelSize, 0, 0, pixelSize, 0, 0);
@@ -351,16 +355,34 @@ function renderImg(src) {
 
 async function loadImg() {
   const town = searchField.value;
-  const accessKey = '4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83';
+  const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
   const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
 
   const res = await fetch(url);
   const data = await res.json();
+  currentImg = data.urls.small;
   renderImg(data.urls.small);
 }
 
 canvasArea.addEventListener('click', (e) => {
   if (e.target.id === 'btn-load') {
     loadImg();
+    renderImg(canvas.toDataURL());
+  }
+  if (e.target.id === 'btn-128') {
+    pixelSize = 4;
+    renderImg(currentImg);
+  }
+  if (e.target.id === 'btn-256') {
+    pixelSize = 2;
+    renderImg(currentImg);
+  }
+  if (e.target.id === 'btn-512') {
+    pixelSize = 1;
+    renderImg(currentImg);
   }
 });
+
+// 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
+// 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
+// e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
