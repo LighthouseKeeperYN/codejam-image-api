@@ -313,14 +313,14 @@ document.addEventListener('mouseup', () => {
   }
 });
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 function toGreyScale() {
-  let imageData = ctx.getImageData(0, 0, 512, 512);
-  let data = imageData.data;
+  const imageData = ctx.getImageData(0, 0, 512, 512);
+  const data = imageData.data;
 
   for (let i = 0; i < data.length; i += 4) {
-    let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
     data[i] = avg;
     data[i + 1] = avg;
     data[i + 2] = avg;
@@ -331,11 +331,11 @@ function toGreyScale() {
 }
 
 function renderImg(src) {
-  img = new Image();
+  const img = new Image();
   img.src = src;
-  img.crossOrigin = "anonymous";
+  img.crossOrigin = 'anonymous';
 
-  img.onload = function () {
+  img.onload = () => {
     clearCanvas();
 
     ctx.scale(1 / pixelSize, 1 / pixelSize);
@@ -343,11 +343,11 @@ function renderImg(src) {
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.min(hRatio, vRatio);
-    const centerShift_x = (canvas.width - img.width * ratio) / 2;
-    const centerShift_y = (canvas.height - img.height * ratio) / 2;
+    const centerShiftX = (canvas.width - img.width * ratio) / 2;
+    const centerShiftY = (canvas.height - img.height * ratio) / 2;
 
     ctx.drawImage(img, 0, 0, img.width, img.height,
-      centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+      centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
 
     ctx.globalCompositeOperation = 'copy';
 
@@ -356,7 +356,7 @@ function renderImg(src) {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
-  }
+  };
 }
 
 async function loadImg() {
@@ -377,9 +377,7 @@ const rangeSlider = document.querySelector('.range-slider');
 const rangeSliderPointer = rangeSlider.previousElementSibling;
 rangeSlider.value = localStorage.getItem('rangeSliderValue') || '2';
 
-window.addEventListener('load', () => {
-  moveSlider();
-});
+window.addEventListener('load', moveSlider);
 rangeSlider.addEventListener('input', () => { moveSlider(); resizeImg(); });
 
 function moveSlider() {
@@ -412,7 +410,7 @@ function resizeImg() {
   }
 }
 
-canvasArea.addEventListener('mousedown', e => {
+canvasArea.addEventListener('mousedown', (e) => {
   if (e.target.classList.contains('btn-square')) {
     e.target.style.transform = 'translate(1px, 2px)';
   }
@@ -433,40 +431,23 @@ canvasArea.addEventListener('click', (e) => {
 });
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBeoD9IqsVhQVRdeEaT1n467YdhkYzCDn4",
-  authDomain: "image-api-lskeeper.firebaseapp.com",
-  databaseURL: "https://image-api-lskeeper.firebaseio.com",
-  projectId: "image-api-lskeeper",
-  storageBucket: "image-api-lskeeper.appspot.com",
-  messagingSenderId: "784369560587",
-  appId: "1:784369560587:web:00f38e79b696c9ccafab0e",
-  measurementId: "G-DNFXHF0P56"
+  apiKey: 'AIzaSyBeoD9IqsVhQVRdeEaT1n467YdhkYzCDn4',
+  authDomain: 'image-api-lskeeper.firebaseapp.com',
+  databaseURL: 'https://image-api-lskeeper.firebaseio.com',
+  projectId: 'image-api-lskeeper',
+  storageBucket: 'image-api-lskeeper.appspot.com',
+  messagingSenderId: '784369560587',
+  appId: '1:784369560587:web:00f38e79b696c9ccafab0e',
+  measurementId: 'G-DNFXHF0P56',
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const provider = new firebase.auth.GithubAuthProvider();
 provider.setCustomParameters({
-  'allow_signup': 'true'
+  allow_signup: 'true',
 });
 
-function GitHubAuthPopUp() {
-  firebase.auth().signInWithPopup(provider).then((result) => {
-    let userName = result.additionalUserInfo.username;
-    console.log(userName)
-    authBtn.previousElementSibling.innerText = userName;
-    authBtn.remove();
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    const credential = error.credential;
-    // ...
-  });
-}
 
 function GitHubAuthRedirect() {
   firebase.auth().signInWithRedirect(provider);
@@ -479,15 +460,7 @@ function getGitHubAuthResponse() {
       authBtn.previousElementSibling.innerText = userName;
       authBtn.remove();
     }
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    const credential = error.credential;
-  });
+  }).catch(() => { });
 }
 
 getGitHubAuthResponse();
