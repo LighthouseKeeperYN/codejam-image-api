@@ -330,7 +330,7 @@ function toGreyScale() {
   currentImg = canvas.toDataURL();
 }
 
-function renderImg(src) {
+function renderImg(src, save) {
   const img = new Image();
   img.src = src;
   img.crossOrigin = 'anonymous';
@@ -356,12 +356,14 @@ function renderImg(src) {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
+
+    if (save) currentImg = canvas.toDataURL();
   };
 }
 
 async function loadImg() {
   const town = searchField.value;
-  const accessKey = '8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff';
+  const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
   // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
   // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
   // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
@@ -369,16 +371,22 @@ async function loadImg() {
 
   const res = await fetch(url);
   const data = await res.json();
-  currentImg = data.urls.small;
-  renderImg(data.urls.small);
+
+  renderImg(data.urls.small, true);
 }
 
 const rangeSlider = document.querySelector('.range-slider');
 const rangeSliderPointer = rangeSlider.previousElementSibling;
 rangeSlider.value = localStorage.getItem('rangeSliderValue') || '2';
 
-window.addEventListener('load', moveSlider);
-rangeSlider.addEventListener('input', () => { moveSlider(); resizeImg(); });
+moveSlider();
+resizeImg();
+
+rangeSlider.addEventListener('input', () => {
+  moveSlider();
+  resizeImg();
+});
+
 
 function moveSlider() {
   const stepDistance = (rangeSlider.offsetWidth - 50) / rangeSlider.max;
@@ -420,10 +428,8 @@ canvasArea.addEventListener('click', (e) => {
   if (e.target.classList.contains('btn-square')) {
     e.target.style.transform = 'translate(0, 0)';
   }
-
   if (e.target.id === 'btn-load') {
     loadImg();
-    renderImg(canvas.toDataURL());
   }
   if (e.target.id === 'btn-bw') {
     toGreyScale();
