@@ -54,6 +54,8 @@ const colorButton = {
 
 clearCanvas();
 
+// ++++++++++ UTILITIES ++++++++++
+
 function clearCanvas() {
   ctx.fillStyle = '#e5e5e5';
   ctx.fillRect(0, 0, canvas.width, canvas.clientWidth);
@@ -109,6 +111,69 @@ function drawLine(x0, y0, x1, y1) {
     }
   }
 }
+
+function toGreyScale() {
+  const imageData = ctx.getImageData(0, 0, 512, 512);
+  const data = imageData.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    data[i] = avg;
+    data[i + 1] = avg;
+    data[i + 2] = avg;
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  currentImg = canvas.toDataURL();
+}
+
+function renderImg(src, save) {
+  const img = new Image();
+  img.src = src;
+  img.crossOrigin = 'anonymous';
+
+  img.onload = () => {
+    clearCanvas();
+
+    ctx.scale(1 / pixelSize, 1 / pixelSize);
+
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.min(hRatio, vRatio);
+    const centerShiftX = (canvas.width - img.width * ratio) / 2;
+    const centerShiftY = (canvas.height - img.height * ratio) / 2;
+
+    ctx.drawImage(img, 0, 0, img.width, img.height,
+      centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+
+    ctx.globalCompositeOperation = 'copy';
+
+    ctx.setTransform(pixelSize, 0, 0, pixelSize, 0, 0);
+    ctx.drawImage(canvas, 0, 0);
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+
+    if (save) currentImg = canvas.toDataURL();
+  };
+}
+
+async function loadImg() {
+  const town = searchField.value;
+  const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
+  // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
+  // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
+  // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
+  const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  renderImg(data.urls.small, true);
+}
+
+
+// ++++++++++ TOOLS ++++++++++
 
 function pencil() {
   drawLine(
@@ -204,6 +269,8 @@ function colorPicker(x, y) {
   color.curr = pxData;
 }
 
+// ++++++++++ TOOLS AND COLORS GUI ++++++++++
+
 function selectTool(tl) {
   Object.values(tools).forEach((button) => {
     button.classList.remove('tool-item--selected');
@@ -275,6 +342,8 @@ Object.values(colorButton).forEach((button) => {
   });
 });
 
+// ++++++++++ CANVAS EVENTS ++++++++++
+
 canvas.addEventListener('mousedown', (e) => {
   if (selectedTool === 'pencil') {
     ctx.fillStyle = colorToString(color.curr);
@@ -317,67 +386,7 @@ document.addEventListener('mouseup', () => {
   }
 });
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-function toGreyScale() {
-  const imageData = ctx.getImageData(0, 0, 512, 512);
-  const data = imageData.data;
-
-  for (let i = 0; i < data.length; i += 4) {
-    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-    data[i] = avg;
-    data[i + 1] = avg;
-    data[i + 2] = avg;
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-  currentImg = canvas.toDataURL();
-}
-
-function renderImg(src, save) {
-  const img = new Image();
-  img.src = src;
-  img.crossOrigin = 'anonymous';
-
-  img.onload = () => {
-    clearCanvas();
-
-    ctx.scale(1 / pixelSize, 1 / pixelSize);
-
-    const hRatio = canvas.width / img.width;
-    const vRatio = canvas.height / img.height;
-    const ratio = Math.min(hRatio, vRatio);
-    const centerShiftX = (canvas.width - img.width * ratio) / 2;
-    const centerShiftY = (canvas.height - img.height * ratio) / 2;
-
-    ctx.drawImage(img, 0, 0, img.width, img.height,
-      centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
-
-    ctx.globalCompositeOperation = 'copy';
-
-    ctx.setTransform(pixelSize, 0, 0, pixelSize, 0, 0);
-    ctx.drawImage(canvas, 0, 0);
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
-
-    if (save) currentImg = canvas.toDataURL();
-  };
-}
-
-async function loadImg() {
-  const town = searchField.value;
-  const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
-  // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
-  // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
-  // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
-  const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  renderImg(data.urls.small, true);
-}
+// ++++++++++ CANVAS GUI ++++++++++
 
 const rangeSlider = document.querySelector('.range-slider');
 const rangeSliderPointer = rangeSlider.previousElementSibling;
@@ -439,6 +448,8 @@ canvasArea.addEventListener('click', (e) => {
   }
 });
 
+// ++++++++++ GITHUB OAUTH ++++++++++
+
 const firebaseConfig = {
   apiKey: 'AIzaSyBeoD9IqsVhQVRdeEaT1n467YdhkYzCDn4',
   authDomain: 'image-api-lskeeper.firebaseapp.com',
@@ -456,7 +467,6 @@ const provider = new firebase.auth.GithubAuthProvider();
 provider.setCustomParameters({
   allow_signup: 'true',
 });
-
 
 function GitHubAuthRedirect() {
   firebase.auth().signInWithRedirect(provider);
@@ -481,6 +491,8 @@ authBtn.addEventListener('mousedown', (e) => {
 authBtn.addEventListener('click', () => {
   GitHubAuthRedirect();
 });
+
+// ++++++++++ STORAGE ++++++++++
 
 window.onbeforeunload = () => {
   localStorage.setItem('imgData', canvas.toDataURL());
