@@ -161,9 +161,6 @@ function renderImg(src, save) {
 async function loadImg() {
   const town = searchField.value;
   const accessKey = 'e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808';
-  // 4669da06ee29e9eaedf6ba6d2f8d654ebe58603b8f36a59572e5a2fe659daa83
-  // 8b8e3b0467291b9c8d0b7970a8af8a29ad1c4db93ef4c0d77f56fc2c237e83ff
-  // e1b2fa57a6eab7a1988ecf8c8cc9f31f3d835c93ea82f1693e23ed48fae13808
   const url = `https://api.unsplash.com/photos/random?query=town,${town}&client_id=${accessKey}`;
 
   const res = await fetch(url);
@@ -171,7 +168,6 @@ async function loadImg() {
 
   renderImg(data.urls.small, true);
 }
-
 
 // ++++++++++ TOOLS ++++++++++
 
