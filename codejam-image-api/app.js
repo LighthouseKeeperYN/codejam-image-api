@@ -12,11 +12,10 @@ if (localStorage.getItem('imgData')) {
 const canvasArea = document.querySelector('.canvas-area');
 const searchField = document.getElementById('search-field');
 
-let currentImg = canvas.toDataURL();
+let currentImg = localStorage.getItem('imgData');
 let pixelSize = 2;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
-let blackWhite = false;
 
 const cursor = {
   curr: {
@@ -218,15 +217,6 @@ Object.values(tools).forEach((tool) => {
   });
 });
 
-window.onbeforeunload = () => {
-  localStorage.setItem('imgData', canvas.toDataURL());
-  localStorage.setItem('color-curr', JSON.stringify(color.curr));
-  localStorage.setItem('color-prev', JSON.stringify(color.prev));
-  localStorage.setItem('color-a', JSON.stringify(color.a));
-  localStorage.setItem('color-b', JSON.stringify(color.b));
-  localStorage.setItem('selectedTool', selectedTool);
-};
-
 document.addEventListener('keypress', (e) => {
   if (e.code === 'KeyP') {
     selectTool(tools.pencilButton);
@@ -385,26 +375,38 @@ async function loadImg() {
 
 const rangeSlider = document.querySelector('.range-slider');
 const rangeSliderPointer = rangeSlider.previousElementSibling;
+rangeSlider.value = localStorage.getItem('rangeSliderValue') || '2';
 
-rangeSlider.addEventListener('input', initSlider);
-window.addEventListener('load', initSlider);
+window.addEventListener('load', () => {
+  moveSlider();
+});
+rangeSlider.addEventListener('input', () => { moveSlider(); resizeImg(); });
 
-function initSlider() {
+function moveSlider() {
   const stepDistance = (rangeSlider.offsetWidth - 50) / rangeSlider.max;
   rangeSliderPointer.style.left = `${stepDistance * rangeSlider.value}px`;
 
-  if (rangeSlider.value == 0) {
+  if (rangeSlider.value === '0') {
     rangeSliderPointer.innerHTML = 128;
+  }
+  if (rangeSlider.value === '1') {
+    rangeSliderPointer.innerHTML = 256;
+  }
+  if (rangeSlider.value === '2') {
+    rangeSliderPointer.innerHTML = 512;
+  }
+}
+
+function resizeImg() {
+  if (rangeSlider.value === '0') {
     pixelSize = 4;
     renderImg(currentImg);
   }
-  if (rangeSlider.value == 1) {
-    rangeSliderPointer.innerHTML = 256;
+  if (rangeSlider.value === '1') {
     pixelSize = 2;
     renderImg(currentImg);
   }
-  if (rangeSlider.value == 2) {
-    rangeSliderPointer.innerHTML = 512;
+  if (rangeSlider.value === '2') {
     pixelSize = 1;
     renderImg(currentImg);
   }
@@ -448,8 +450,6 @@ provider.setCustomParameters({
   'allow_signup': 'true'
 });
 
-getGitHubAuthResponse();
-
 function GitHubAuthPopUp() {
   firebase.auth().signInWithPopup(provider).then((result) => {
     let userName = result.additionalUserInfo.username;
@@ -490,11 +490,22 @@ function getGitHubAuthResponse() {
   });
 }
 
+getGitHubAuthResponse();
+
 const authBtn = document.getElementById('btn-auth');
 authBtn.addEventListener('mousedown', (e) => {
   e.target.style.transform = 'translate(1px, 2px)';
 });
-authBtn.addEventListener('click', (e) => {
+authBtn.addEventListener('click', () => {
   GitHubAuthRedirect();
 });
 
+window.onbeforeunload = () => {
+  localStorage.setItem('imgData', canvas.toDataURL());
+  localStorage.setItem('color-curr', JSON.stringify(color.curr));
+  localStorage.setItem('color-prev', JSON.stringify(color.prev));
+  localStorage.setItem('color-a', JSON.stringify(color.a));
+  localStorage.setItem('color-b', JSON.stringify(color.b));
+  localStorage.setItem('selectedTool', selectedTool);
+  localStorage.setItem('rangeSliderValue', rangeSlider.value);
+};
