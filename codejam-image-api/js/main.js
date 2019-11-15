@@ -20,6 +20,7 @@ let currentImg = localStorage.getItem('imgData');
 let pixelSize = 2;
 let selectedTool = localStorage.getItem('selectedTool') || 'pencil';
 let isDrawing = false;
+let isImageLoaded = localStorage.getItem('isImageLoaded');
 
 const cursor = {
   curr: {
@@ -438,9 +439,12 @@ canvasArea.addEventListener('click', (e) => {
   }
   if (e.target.id === 'btn-load') {
     loadImg();
+    isImageLoaded = true;
   }
   if (e.target.id === 'btn-bw') {
-    toGreyScale();
+    if (!isImageLoaded || isImageLoaded === 'null') {
+      alert('Please load the image first');
+    } else toGreyScale();
   }
 });
 
@@ -498,4 +502,5 @@ window.onbeforeunload = () => {
   localStorage.setItem('color-b', JSON.stringify(color.b));
   localStorage.setItem('selectedTool', selectedTool);
   localStorage.setItem('rangeSliderValue', rangeSlider.value);
+  localStorage.setItem('isImageLoaded', isImageLoaded);
 };
