@@ -1,3 +1,7 @@
+
+import '../sass/main.scss';
+import '@babel/polyfill';
+
 const canvas = document.querySelector('.canvas');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
@@ -386,7 +390,6 @@ rangeSlider.addEventListener('input', () => {
   moveSlider();
   resizeImg();
 });
-
 
 function moveSlider() {
   const stepDistance = (rangeSlider.offsetWidth - 50) / rangeSlider.max;

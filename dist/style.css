@@ -73,12 +73,12 @@ button {
 .nav-icon {
   width: 4rem;
   height: 4rem;
-  background: url(assets/img/nav-icon.svg) center no-repeat; }
+  background: url(images/46f9e451cd45864a5b607b327a60e437.svg) center no-repeat; }
 
 .menu-icon {
   width: 4rem;
   height: 4rem;
-  background: url(assets/img/menu-icon.svg) center no-repeat; }
+  background: url(images/3f086370e5b40dc8ad3cbf1512d05076.svg) center no-repeat; }
 
 .canvas-area {
   position: absolute;
@@ -154,7 +154,7 @@ button {
     content: "";
     width: 12px;
     height: 12px;
-    background: url("assets/img/search.svg"); }
+    background: url(images/2b05a232b3b9979ebf4c9a6d10107427.svg); }
 
 .search-field {
   border: 0;
@@ -224,3 +224,4 @@ button {
     -webkit-appearance: none; }
   .range-slider:hover {
     cursor: pointer; }
+
